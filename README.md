@@ -1,13 +1,12 @@
-## Scflex: A flexible distributed engine framework powered by Apache Spark & MongoDB
-
+## Scflex: A flexible distributed engine framework powered by Apache Spark
 
 ### Installation
 #### Dependencies
  - Apache Spark
- - MongoDB
  - HADOOP YARN (for High Availabilty)
 
 #### set PYTHONPATH
+for example
 ```
 $ export PYTHONPATH=$PYTHONPATH:/home/kuanpern/Scflex/Scflex-master
 ```
