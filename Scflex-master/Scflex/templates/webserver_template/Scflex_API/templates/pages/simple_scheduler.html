@@ -1,0 +1,170 @@
+<html>
+
+<head>
+ <title> Simple Task Scheduler </title>
+ <meta charset="UTF-8">
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> 
+ <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ <script src="static/js/readfile_todiv.js"></script>
+
+ <style>
+  th, td {
+   text-align: center;
+  }
+ </style>
+</head>
+
+<body>
+ <div id="btn_holder">
+  <span> | </span>
+  <button type="button" class="btn btn-primary" onclick="add_task()"> Add Task </button>
+  <button type="button" class="btn btn-primary" onclick="export_tasks()"> Export </button>
+  <button type="button" class="btn btn-primary" onclick="import_tasks()"> Import </button>
+  <span> | </span>
+  <button type="button" class="btn btn-primary" onclick="submit_tasks()"> Submit </button>
+  <span> | </span>
+ </div>
+
+ <div id="fileload_holder" style="display:none;">
+  <input type="file" id="input_file" onchange='checkFileAPI();readfile_todiv(this,"hidden_input_div")' style="display:inline-block;"></input>
+  <button type="button" onclick="$('#fileload_holder').hide(); load_tasks()">Load</button>
+  <div id="hidden_input_div" type="text" style="display:none"></div>
+ </div>
+
+ <hr>
+
+ <div id="table_holder">
+ <table style="width:100%;" id="task_table">
+  <thead>
+   <tr><th>Frequency</th><th>Unit</th><th>Time</th><th>Weekday</th><th>Command</th><th>Last run</th><th>Last status</th><th></th></tr>
+  </thead>
+  <tbody>
+
+  </tbody>
+ </table>
+ <hr>
+ </div>
+</body>
+
+<script>
+// set input behaviour
+$('#task_table').on('change', '.input_unit', function(){
+ var e = $(this).closest('.task_item');
+ var unit = $(this).find('option:selected').val();
+ if ((unit == 'minute') || (unit == 'hour')){
+  e.find('.input_time1')  .prop('disabled', true);
+  e.find('.input_time2')  .prop('disabled', true);
+  e.find('.input_weekday').prop('disabled', true);
+ } else if (unit == 'day') {
+  e.find('.input_time1')  .prop('disabled', false);
+  e.find('.input_time2')  .prop('disabled', false);
+  e.find('.input_weekday').prop('disabled', true);
+ } else if (unit == 'week') {
+  e.find('.input_time1')  .prop('disabled', false);
+  e.find('.input_time2')  .prop('disabled', false);
+  e.find('.input_weekday').prop('disabled', false);
+ } // end if
+}); // end set behaviour
+
+// add task item
+function add_task(){
+ var template = "<tr class='task_item'><td><input class='input_freq' type=number step=1 value=1 style='width:60px'></input></td><td><select class='input_unit'><option value=minute> Minute </option><option value=hour> Hour </option><option value=day> Day </option><option value=week> Week </option></select></td><td><input class='input_time1' disabled type=number step=1 value=0 min=0 max=23 style='width:60px'></input>:<input class='input_time2' disabled type=number step=1 value=0 min=0 max=59 style='width:60px'></input></td><td><select class='input_weekday' disabled ><option selected value=monday> Monday </option><option value=tuesday> Tuesday </option><option value=wednesday> Wednesday </option><option value=thursday> Thursday </option><option value=friday> Friday </option><option value=saturday> Saturday </option><option value=sunday> Sunday </option></select></td><td><input class='input_cmd' type='text' style='width:650px'></input></td><td class='last_run'></td><td class='last_status'></td><td><button class='btn_remove</td>' type='button'>&#10008</button></td></tr>";
+ $('#task_table tbody').append(template);
+} // end function
+
+// remove task item
+$('#task_table').on('click', '.btn_remove', function(){
+  $(this).closest('.task_item').remove();
+});
+</script>
+
+<script>
+function export_tasks(){
+ var output = collect_items();
+ var out_string = JSON.stringify(output);
+ var timeStamp = Math.floor(Date.now() / 1000); 
+ download("tasks-"+timeStamp+".json", out_string);
+} // end function
+
+function import_tasks(){
+// var input_str = '[{"input_freq":"5","input_unit":"minute","input_time":"0:0","input_weekday":"none","input_cmd":"python world.py -i a -j b"},{"input_freq":"1","input_unit":"week","input_time":"12:35","input_weekday":"wednesday","input_cmd":"python hello.py"}]';
+ $('#input_file').trigger('click');
+ $('#fileload_holder').show();
+
+}// end function
+
+function load_tasks(){
+
+ var input_str = $('#hidden_input_div').html();
+ var inputs = JSON.parse(input_str);
+ for (var i=0; i < inputs.length; ++i){
+  add_task();
+  var input = inputs[i];
+//  alert(input['input_freq']);
+
+  // parse inputs
+  input['input_freq'] = parseInt(input['input_freq']);
+  var times = input['input_time'].split(':');
+  input['input_time1'] = parseInt(times[0]);
+  input['input_time2'] = parseInt(times[1]);
+
+  // assignments
+  var e = $('.task_item').last();
+  e.find('.input_freq')   .val(input['input_freq']);
+  e.find('.input_unit')   .val(input['input_unit']);
+  e.find('.input_time1')  .val(input['input_time1']);
+  e.find('.input_time2')  .val(input['input_time2']);
+  e.find('.input_weekday').val(input['input_weekday']);
+  e.find('.input_cmd')    .val(input['input_cmd']);
+
+  e.find('.input_unit').trigger('change');
+ } // end for
+} // end function
+
+function collect_items(){
+var output = [];
+$('#task_table .task_item').each(function(){
+ var item = {
+  'input_freq'   : $(this).find('.input_freq').val(),
+  'input_unit'   : $(this).find('.input_unit option:selected').val(),
+  'input_time'   : $(this).find('.input_time1').val() + ':' + $(this).find('.input_time2').val(),
+  'input_weekday': $(this).find('.input_weekday option:selected').val(),
+  'input_cmd'    : $(this).find('.input_cmd').val(),
+  'last_run'     : $(this).find('.last_run').html(),
+  'last_status'  : $(this).find('.last_status').html()
+ }; // end 
+ output.push(item);
+});
+return output;
+} // end function
+
+function submit_tasks(){
+ var url = 'http://localhost:9090/Scflex_controller/simple_scheduler_receiver';
+ var output = collect_items();
+ $.post(url, output)
+  .done(function(msg){
+    alert(msg);
+ });
+} // end function
+</script>
+
+<script>
+function download(filename, text) {
+    var pom = document.createElement('a');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    pom.setAttribute('download', filename);
+
+    if (document.createEvent) {
+        var event = document.createEvent('MouseEvents');
+        event.initEvent('click', true, true);
+        pom.dispatchEvent(event);
+    }
+    else {
+        pom.click();
+    }
+}
+</script>
+
+</html>

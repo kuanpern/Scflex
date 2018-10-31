@@ -1,0 +1,57 @@
+<html>
+
+<head>
+  <title> Test Input </title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> 
+</head>
+
+<body>
+
+<div>
+<h3> POST submit </h3>
+  <form id="form_1" action="/API/example_formInput" method="post">
+    email:    <input type="email"    name="email"><br>
+    password: <input type="password" name="password">
+    <br>
+    <input  type="submit" val="Form Submit">
+    <button type="button" val="Json Submit" id="btn_json" onclick="send_json();">JSON Submit</button>
+  </form> 
+</div>
+
+<hr>
+
+<div>
+<h3> GET submit </h3>
+  <form id="form_2" action="/API/example_urlQuery" method="get">
+    Designation: <input type="text" name="designation" value="Mr"><br>
+    User name:   <input type="text" name="username" value="Smith">
+    <br>
+    <input  type="submit" val="Form Submit">
+  </form> 
+</div>
+
+<div>
+  <ul id="return_box">
+  </ul>
+</div>
+
+</body>
+
+
+<script>
+function send_json(){
+  var formData = JSON.stringify($("#form_1").serializeArray());
+  $.ajax({
+    type: "POST",
+    url: "/API/example_json",
+    data: formData,
+    success: function(data){$("#return_box").append("<li>"+JSON.stringify(data))+"</li>";},
+    dataType: "json",
+    contentType : "application/json"
+  });
+} // end function
+</script>
+
+</html>
+
+

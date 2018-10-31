@@ -1,0 +1,46 @@
+#!/usr/bin/python
+'''Scflex distributed computing engine'''
+import time
+import yaml
+import os
+import subprocess
+import argparse
+import inspect
+import os
+from Scflex.externals.open_data_sciences.shorthand import meta_parse_args
+
+# read input
+parser = argparse.ArgumentParser(description='Scflex distributed computing engine')
+parser.add_argument('--app',     help='Application name')
+parser.add_argument('--appdir',  default=os.getcwd(), help='Application install directory')
+parser.add_argument('--conf',    help='path to configuration file (.yaml)')
+parser.add_argument('--logdir',  help='log dir path')
+parser.add_argument('--master',  choices=('standalone', 'yarn'), help='spark master mode')
+parser.add_argument('--spark_bin_dir', default='/home/spark/SPARK/bin', help='spark bin directory')
+parser.add_argument('--spark_url', default=None, help='spark master url')
+parser.add_argument('--hibernation', default=10, help='hibernation period (secs). Standalone mode only')
+parser.add_argument('--ui_port', default=8080, help='spark ui port')
+parser.add_argument('--meta', help="meta parameter file list (.yaml)", nargs='+')
+
+# parse input
+args = meta_parse_args(parser)
+appName   = args['app']
+conf_path = args['conf']
+log_dir   = args['logdir']
+
+# generate command line
+curdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+cmd = 'spark-submit --master yarn --deploy-mode cluster {curdir}/scflex_service.py --app {app} --conf {conf} --logdir {logdir} --meta {meta}'
+cmd = cmd.format(
+  curdir = curdir,
+  app    = args['app'],
+  conf   = args['conf'],
+  logdir = args['logdir'],
+  meta   = args['meta']
+) # end cmd 
+
+proc = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd, env=env)
+stdout, stderr = proc.communicate()
+logger.info('EXITCODE:' % status)
+logger.info('STDOUT:' % stdout)
+logger.info('STDERR:' % stderr)

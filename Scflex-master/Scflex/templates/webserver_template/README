@@ -1,0 +1,33 @@
+# SERVER INSTALLATION GUIDE #
+
+= PART A: packages installation =
+(0) [optional] copy or soft-linked the directory to a desired location, say /home/user/Scflex_server
+>$ cp -r controls/* /home/user/Scflex_server/
+
+(1) setup a virtual environment "Scflex_API_venv" (ensure virturalenv package is installed)
+>$ cd /home/user/Scflex_server/
+>$ virtualenv Scflex_API_venv
+
+(2) activate the virtual environment
+>$ source Scflex_API_venv/bin/activate
+
+(3) install the necessary packages into the virtual environment
+>$ pip install -r requirements.txt
+
+(4) [optional] deactivate the environment
+>$ deactivate
+
+= PART B: nginx server configuration =
+(1) Edit 3 files of 'Scflex_API.ini', 'Scflex_API.nginx' and 'Scflex_API.service'. Change the directories and user accordingly.
+>$ nano Scflex_API.ini  Scflex_API.nginx  Scflex_API.service
+
+(2) copy the service and nginx configuration files to corresponding locations
+sudo mv Scflex_API.nginx /etc/nginx/sites-available/Scflex_API
+sudo cp Scflex_API.service /etc/systemd/system/.
+cd /etc/nginx/sites-enabled; sudo ln -sf ../sites-available/Scflex_API .
+
+(3) restart / reload the Nginx server
+>$ sudo service nginx restart
+
+(4) start the Scflex server service
+>$ sudo service Scflex_API start

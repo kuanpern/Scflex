@@ -1,0 +1,19 @@
+server {
+    listen {{ port }};
+    server_name _;
+
+    access_log {{ service_logging_directory }}/Scflex_API_access.log;
+    error_log  {{ service_logging_directory }}/Scflex_API_error.log;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:{{ install_dir }}/Scflex_API.sock;
+    }
+
+    location ^~ /static/  {
+        include  /etc/nginx/mime.types;
+        root {{ install_dir }};
+    }
+
+}
+

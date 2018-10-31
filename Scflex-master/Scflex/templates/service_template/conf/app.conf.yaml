@@ -1,0 +1,14 @@
+<<<<<<< HEAD
+app:    {{ application_name }}
+master: {{ spark_master_url }}
+conf:   {{ scflex_task_configuration }} /* usually ./conf/scflex_task.conf.yaml */
+logdir: {{ logging_directory }}         /* usually ./logs/ */
+=======
+app            : {{ application_name }}
+conf           : {{ scflex_task_configuration }}
+logdir         : {{ logging_directory }}
+master         : {{ master_mode }}
+spark_url      : {{ spark_master_url }}
+hadoop_conf_dir: {{ hadoop_conf_dir }}
+yarn_conf_dir  : {{ yarn_conf_dir }}
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5

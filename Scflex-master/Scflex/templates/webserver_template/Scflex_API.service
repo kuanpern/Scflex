@@ -1,0 +1,14 @@
+[Unit]
+Description=uWSGI instance to serve Scflex_API
+After=network.target
+
+[Service]
+User={{ user }}
+Group={{ group }}
+WorkingDirectory={{ install_dir }}
+Environment="PATH={{ install_dir }}/Scflex_API_venv/bin"
+ExecStart={{ install_dir }}/Scflex_API_venv/bin/uwsgi --ini Scflex_API.ini
+
+[Install]
+WantedBy=multi-user.target
+

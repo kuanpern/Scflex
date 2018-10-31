@@ -1,0 +1,9 @@
+db_pars:
+  username    : {{ mongodb_username }}
+  password    : {{ mongodb_password }}
+  cluster_url : {{ mongodb_url }}
+  database    : {{ mongodb_database }}
+  authSource  : {{ mongodb_authSource }}
+task_db_name   : {{ Scflex_database }}
+task_coll_name : {{ Scflex_collection }}
+match_dict : {"role": "engine_conf"}

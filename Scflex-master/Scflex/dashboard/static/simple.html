@@ -1,0 +1,51 @@
+<html>
+<head>
+ <title> Simple Test on Nginx </title>
+
+<script src="http://code.jquery.com/jquery-1.12.3.js"></script>
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+
+<script>
+$(document).ready(function() {
+    oTable = $('#example').DataTable();
+} );
+</script>
+
+</head>
+
+<body>
+
+ <button type="button" onclick="oTable.clear().draw();"> Clear data </button>
+ <button type="button" onclick="oTable.ajax.url('http://localhost:5001/priceUpdateStatus').load();"> Add data </button>
+
+
+ <table id="example" class="display" width="100%" cellspacing="0">
+   <thead>
+    <tr>
+     <th>market</th>
+     <th>symbol</th>
+     <th>priority</th>
+     <th>failures</th>
+     <th>last record</th>
+     <th>last updated</th>
+     <th>last success</th>
+     <th>last failure</th>
+     <th>active</th>
+    </tr>
+   </thead>
+   <tfoot>
+    <tr>
+     <th>market</th>
+     <th>symbol</th>
+     <th>priority</th>
+     <th>failures</th>
+     <th>last record</th>
+     <th>last updated</th>
+     <th>last success</th>
+     <th>last failure</th>
+     <th>active</th>    </tr>
+   </tfoot>
+ </table>
+
+</body>

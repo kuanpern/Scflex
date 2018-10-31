@@ -1,0 +1,14 @@
+[Unit]
+Description=uWSGI instance to serve Scflex_API
+After=network.target
+
+[Service]
+scube_backend=scube_backend
+Group=www-data
+WorkingDirectory=/home/scube_backend/backend_nginx_servers/Scflex_API/Scflex_API
+Environment="PATH=/home/scube_backend/backend_nginx_servers/Scflex_API/Scflex_API/Scflex_API_venv/bin"
+ExecStart=/home/scube_backend/backend_nginx_servers/Scflex_API/Scflex_API/Scflex_API_venv/bin/uwsgi --ini Scflex_API.ini
+
+[Install]
+WantedBy=multi-scube_backend.target
+

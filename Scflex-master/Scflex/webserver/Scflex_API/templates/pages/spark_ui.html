@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- jQuery -->
+  <script src="/static/vendor/jquery/jquery.min.js"></script>
+</head>
+
+<body>
+ <div>
+  <iframe id="portal" style="width:100%; frameBorder=0;" src=""></iframe>
+ </div>
+</body>
+
+<script>
+$( document ).ready(function() {
+  // load spark ui url
+  $.ajax({
+   url: "/Scflex_controller/spark_ui",
+  }).done(function(msg) {
+   $("#portal").prop('src', 'http://'+msg);
+  });
+
+});
+</script>
+
+<script> // auto-resize
+function resizeIFrameToFitContent( iFrame ) {
+  iFrame.width  = iFrame.contentWindow.document.body.scrollWidth;
+  iFrame.height = iFrame.contentWindow.document.body.scrollHeight;
+} // end function
+
+window.addEventListener('DOMContentLoaded', function(e) {
+  var iFrame = document.getElementById( 'portal' );
+  resizeIFrameToFitContent( iFrame );
+});
+</script>
+
+</html>

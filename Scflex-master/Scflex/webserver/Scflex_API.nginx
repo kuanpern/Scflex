@@ -1,0 +1,19 @@
+server {
+    listen 9090;
+    server_name _;
+
+    access_log /home/scube_backend/backend_nginx_servers/Scflex_API/logs/Scflex_API_access.log;
+    error_log  /home/scube_backend/backend_nginx_servers/Scflex_API/logs/Scflex_API_error.log;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/home/scube_backend/backend_nginx_servers/Scflex_API/Scflex_API.sock;
+    }
+
+    location ^~ /static/  {
+        include  /etc/nginx/mime.types;
+        root /home/scube_backend/backend_nginx_servers/Scflex_API/Scflex_API/;
+    }
+
+}
+

@@ -1,0 +1,8 @@
+max_timeout        : .infinity
+refresh_interval   : 60
+hibernation_period : 30
+max_failure_n      : 3
+min_repeat_interval: 28800
+batch_size         : 120
+nice_level         : null
+hibernation_period_if_empty: 60

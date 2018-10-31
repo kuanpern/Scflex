@@ -1,0 +1,182 @@
+#!/usr/bin/python
+help_text = '''Interactive session to add package to Scflex engine'''
+import inspect
+import os
+import getpass
+import commands
+from shorthand import jinja_render
+
+print ' ==', help_text, '== '
+print
+
+# ----------------------------------------------- #
+qs = 'Application name: '
+application_name = raw_input(qs)
+
+# ----------------------------------------------- #
+qs = 'Task list name: '
+task_list_name = raw_input(qs)
+
+# ----------------------------------------------- #
+qs = 'Install directory: '
+install_dir = raw_input(qs)
+
+# ----------------------------------------------- #
+dirname = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+default = dirname.replace('Scflex-master/Scflex/bin', '')
+qs = 'Scflex home directory: [%s]: ' % default
+Scflex_install_dir = raw_input(qs) or default
+
+# ----------------------------------------------- #
+<<<<<<< HEAD
+qs = 'Spark master url: '
+spark_master_url = raw_input(qs)
+
+# ----------------------------------------------- #
+default = 'conf/scflex_task.conf.yaml'
+=======
+while True:
+	qs = 'Spark master mode (yarn/standalone): '
+	master_mode = raw_input(qs)
+	if master_mode not in ['yarn', 'standalone']:
+		print 'unknown master mode:', master_mode
+	else:
+		break
+	# end if
+# end while
+
+# ----------------------------------------------- #
+if master_mode == 'standalone':
+	qs = 'Spark master url: '
+	spark_master_url = raw_input(qs)
+	hadoop_conf_dir  = None
+	yarn_conf_dir    = None
+elif master_mode == 'yarn':
+	spark_master_url = None
+	qs = 'Hadoop configuration directory: '
+	hadoop_conf_dir = raw_input(qs)
+	qs = 'Yarn configuration directory: '
+	yarn_conf_dir   = raw_input(qs)
+# end if
+
+# ----------------------------------------------- #
+default = install_dir+'/conf/scflex_task.conf.yaml'
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
+qs = 'Scflex task configuration file path [%s]: ' % default
+scflex_task_configuration = raw_input(qs) or default
+
+# ----------------------------------------------- #
+<<<<<<< HEAD
+default = 'logs'
+=======
+default = install_dir+'/logs'
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
+qs = 'logging directory [%s]: ' % default
+logging_directory = raw_input(qs) or default
+
+# ----------------------------------------------- #
+qs = 'MongoDB user name: '
+mongodb_username = raw_input(qs)
+
+# ----------------------------------------------- #
+qs = 'MongoDB password: '
+mongodb_password = getpass.getpass(qs)
+
+# ----------------------------------------------- #
+qs = 'MongoDB URL: '
+mongodb_url = raw_input(qs)
+
+# ----------------------------------------------- #
+qs = 'MongoDB credential file: '
+mongodb_credential_file = raw_input(qs)
+
+# ----------------------------------------------- #
+default = 'Scflex_control'
+qs = 'MongoDB database [%s]: ' % default
+mongodb_database = raw_input(qs) or default
+
+# ----------------------------------------------- #
+default = 'admin'
+<<<<<<< HEAD
+qs = 'logging directory [%s]: ' % default
+=======
+qs = 'authSource databse [%s]: ' % default
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
+mongodb_authSource = raw_input(qs) or default
+
+# ----------------------------------------------- #
+qs = 'Scflex task database: '
+Scflex_database = raw_input(qs)
+
+# ----------------------------------------------- #
+qs = 'Scflex task collection: '
+Scflex_collection = raw_input(qs)
+
+<<<<<<< HEAD
+=======
+
+# ----------------------------------------------- #
+qs = 'Flask home path: '
+flask_app_home = raw_input(qs)
+
+# ----------------------------------------------- #
+qs = 'URL prefix: '
+url_prefix = raw_input(qs)
+
+
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
+# > need check code here 
+
+# ------ collect the content ------ #
+context = {
+<<<<<<< HEAD
+=======
+  'install_dir'              : install_dir,
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
+  'application_name'         : application_name,
+  'mongodb_username'         : mongodb_username,
+  'mongodb_password'         : mongodb_password,
+  'mongodb_url'              : mongodb_url,
+  'mongodb_database'         : mongodb_database,
+  'mongodb_authSource'       : mongodb_authSource,
+  'Scflex_install_dir'       : Scflex_install_dir,
+  'Scflex_database'          : Scflex_database,
+  'Scflex_collection'        : Scflex_collection,
+  'spark_master_url'         : spark_master_url,
+  'scflex_task_configuration': scflex_task_configuration,
+  'logging_directory'        : logging_directory,
+  'task_list_name'           : task_list_name,
+<<<<<<< HEAD
+  'mongodb_credential_file'  : mongodb_credential_file
+=======
+  'mongodb_credential_file'  : mongodb_credential_file,
+  'flask_app_home'           : flask_app_home,
+  'url_prefix'               : url_prefix,
+  'app_service_path'         : os.path.basename(install_dir) + '.' + application_name.replace(os.sep, '.'),
+  'master_mode'              : master_mode,
+  'hadoop_conf_dir'          : hadoop_conf_dir,
+  'yarn_conf_dir'            : yarn_conf_dir
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
+} # end context
+
+cwd = os.getcwd()
+cmd = 'cp -r {Scflex_install_dir}/Scflex-master/Scflex/templates/service_template {install_dir}/{application_name}'
+cmd = cmd.format(Scflex_install_dir = Scflex_install_dir, install_dir = install_dir, application_name = application_name)
+commands.getoutput(cmd)
+os.chdir(install_dir+os.sep+application_name)
+
+# change the file 
+<<<<<<< HEAD
+files = ['start_app.sh', 'conf/app.conf.yaml', 'conf/scflex_task.conf.yaml']
+=======
+files = ['start_app.sh', 'conf/app.conf.yaml', 'conf/scflex_task.conf.yaml', 'setup/flask_hook.py', 'setup/init_task_list.py', 'setup/task_manager.py']
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
+for filename in files:
+	content = jinja_render(filename, context)
+	with open(filename, 'w') as fout:
+		fout.writelines(content)
+	# end with
+# end for
+
+print
+print 'Successfully added hook directory at:', install_dir

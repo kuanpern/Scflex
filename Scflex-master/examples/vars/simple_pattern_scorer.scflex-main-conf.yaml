@@ -1,0 +1,7 @@
+task_db_conn_str: sqlite:////home/scube_dev/scflex/Scflex-master/Scflex/bin/tmp_db/temp.db
+# db_conn_Str: 'mysql+mysqldb://analytic_bot:analyticpass@localhost:3306/Analytics'
+task_table_name: simple_pattern_scorer
+engine_conf_path: simple_pattern_scorer.scflex-engine-conf.yaml
+spark:
+  spark.executor.memory: 1G
+  spark.driver.memory  : 1G  

@@ -1,0 +1,175 @@
+#!/usr/bin/python
+TODO: to be included in standard install
+help_text = '''Interactive session to setup web-server for Scflex engine'''
+import inspect
+import os
+import getpass
+import commands
+import sys
+import os
+import getpass
+import commands
+
+from shorthand import jinja_render
+
+print ' ==', help_text, '== '
+print
+
+# taken from http://matthiaseisen.com/pp/patterns/p0198/
+import jinja2
+def jinja_render(tpl_path, context):
+	path, filename = os.path.split(tpl_path)
+	return jinja2.Environment(
+		loader=jinja2.FileSystemLoader(path or './')
+	).get_template(filename).render(context)
+# end def
+
+print '==', help_text, '== '
+print
+
+# check user has root permission
+if os.getuid() != 0:
+	print 'This script needs root privilege to run. Exit.'
+	sys.exit(1)
+# end if
+
+
+# ----------------------------------------------- =
+qs = 'Scflex install directory: '
+scflex_install_dir = input(qs)
+
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
+# ----------------------------------------------- =
+qs = 'Target install directory: '
+install_dir = input(qs)
+
+# ----------------------------------------------- =
+qs = 'User: '
+user = input(qs)
+
+# ----------------------------------------------- =
+qs = 'Group: '
+group = input(qs)
+
+# ----------------------------------------------- =
+default = 9090
+<<<<<<< HEAD
+qs = 'Web-server port [%d]: ' % default
+=======
+qs = 'Web-server port [%d]: '% default
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
+port = input(qs) or default
+
+# ----------------------------------------------- =
+qs = 'MongoDB credential file: '
+mongo_cred_file = input(qs)
+
+# ----------------------------------------------- =
+default = '{install_dir}/logs/'.format(install_dir=install_dir)
+<<<<<<< HEAD
+qs = 'App logging directory [%s]: ' % default
+=======
+qs = 'App logging directory [%s]: '% default
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
+app_logging_directory = input(qs) or default
+
+# ----------------------------------------------- =
+default = '{install_dir}/logs/'.format(install_dir=install_dir)
+<<<<<<< HEAD
+qs = 'Linux service logging/error directory [%s]: ' % default
+=======
+qs = 'Linux service logging/error directory [%s]: '% default
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
+service_logging_directory = input(qs) or default
+
+# > need check code here 
+
+# ------ collect the content ------ =
+context = {
+  'user':  user,
+  'group': group,
+  'port':  port,
+  'mongo_cred_file': mongo_cred_file,
+  'install_dir': install_dir,
+<<<<<<< HEAD
+  'app_logging_directory'    : app_logging_directory,
+=======
+  'app_logging_directory'   : app_logging_directory,
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
+  'service_logging_directory': service_logging_directory
+} # end context
+
+
+cwd = os.getcwd()
+# main =
+<<<<<<< HEAD
+cmd = 'cp -r {Scflex_install_dir}/Scflex-master/Scflex/templates/webserver_template {install_dir}'
+cmd = cmd.format(Scflex_install_dir=Scflex_install_dir, install_dir=install_dir)
+=======
+cmd = 'cp -r {scflex_install_dir}/Scflex-master/Scflex/templates/webserver_template {install_dir}'
+cmd = cmd.format(scflex_install_dir=scflex_install_dir, install_dir=install_dir)
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
+print cmd; print commands.getoutput(cmd)
+
+# setup a virtual environment "Scflex_API_venv" (ensure virturalenv package is installed)
+os.chdir(install_dir)
+cmd = 'virtualenv Scflex_API_venv'
+print cmd; print commands.getoutput(cmd)
+<<<<<<< HEAD
+# activate the virtual environment
+cmd = 'source Scflex_API_venv/bin/activate'
+print cmd; print commands.getoutput(cmd)
+# install the necessary packages into the virtual environment
+cmd = 'pip install -r requirements.txt'
+=======
+# install the necessary packages into the virtual environment
+cmd = './Scflex_API_venv/bin/pip install -r requirements.txt'
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
+print cmd; print commands.getoutput(cmd)
+
+# change the files
+files = ['Scflex_API.ini', 'Scflex_API.nginx', 'Scflex_API.service', 'Scflex_API/views/task_status.py']
+for filename in files:
+	content = jinja_render(filename, context)
+	with open(filename, 'w') as fout:
+		fout.writelines(content)
+	# end with
+# end for
+
+# copy the service and nginx configuration files to corresponding locations
+<<<<<<< HEAD
+cmd = 'sudo mv Scflex_API.nginx /etc/nginx/sites-available/Scflex_API; ln -sf /etc/nginx/sites-available/Scflex_API Scflex_API.nginx'
+print cmd; print commands.getoutput(cmd)
+cmd = 'sudo mv Scflex_API.service /etc/systemd/system/Scflex_API.service; ln -sf /etc/systemd/system/Scflex_API.service Scflex_API.service'
+print cmd; print commands.getoutput(cmd)
+cmd = 'cd /etc/nginx/sites-enabled; sudo ln -sf ../sites-available/Scflex_API .'
+print cmd; print commands.getoutput(cmd)
+
+print
+print 'Successfully installed Scflex web-server at:', install_dir
+
+print ' = Post installation ='
+print '- to restart nginx server, run the following as superuser (i.e. sudo -):'
+print '>$ service nginx restart'
+print '- to start the Scflex server service, run the following as superuser (i.e. sudo -):'
+print '>$ service Scflex_API start'
+=======
+cmd = 'mv Scflex_API.nginx /etc/nginx/sites-available/Scflex_API; ln -sf /etc/nginx/sites-available/Scflex_API Scflex_API.nginx'
+print cmd; print commands.getoutput(cmd)
+cmd = 'mv Scflex_API.service /etc/systemd/system/Scflex_API.service; ln -sf /etc/systemd/system/Scflex_API.service Scflex_API.service'
+print cmd; print commands.getoutput(cmd)
+cmd = 'cd /etc/nginx/sites-enabled;  ln -sf ../sites-available/Scflex_API .'
+print cmd; print commands.getoutput(cmd)
+
+cmd = 'chown {user}:{group} -R {install_dir}'.format(user=user, group=group, install_dir=install_dir)
+print cmd; print commands.getoutput(cmd)
+print 'Successfully installed Scflex web-server at:', install_dir
+
+
+print '= Post installation ='
+print '- to restart nginx server, run the following as superuser (i.e.  -):'
+print '>$ service nginx restart'
+print '- to start the Scflex server service, run the following as superuser (i.e.  -):'
+print '>$ service Scflex_API start'
+
+>>>>>>> e009115e2b8660f291d8a3c8db71e01d39525aa5
